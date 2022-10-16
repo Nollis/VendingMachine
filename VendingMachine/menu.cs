@@ -7,7 +7,6 @@
 
         public void Display()
         {
-            // denominations = new[] { 1, 5, 10, 20, 50, 100, 500, 1000 };
 
             while (true)
             {
@@ -16,6 +15,7 @@
                 Console.WriteLine("1] Display Vending Machine Items");
                 Console.WriteLine("2] Purchase");
                 Console.WriteLine("3] Insert money");
+                Console.WriteLine("4] End Transaction");
                 Console.WriteLine("Q] Quit");
 
                 Console.Write("What option do you want to select? ");
@@ -35,6 +35,15 @@
                 else if (input == "3")
                 {
                     InsertMoney();
+                }
+                else if (input == "4")
+                {
+ 
+                    Dictionary<string, int> denominations = mm.EndTransaction(mm._availableFunds);
+                    foreach (KeyValuePair<string, int> kv in denominations)
+                        Console.WriteLine(kv.Value.ToString() + " " + kv.Key.ToString());
+                    Console.WriteLine("Returned to buyer!");
+                    Console.ReadKey();
                 }
                 else if (input.ToUpper() == "Q")
                 {
@@ -84,6 +93,7 @@
                 else
                 {
                     Console.WriteLine("Add a valid amount");
+                    Console.ReadKey();
                 }
             }
         }

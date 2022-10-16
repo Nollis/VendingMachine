@@ -13,10 +13,10 @@ namespace VendingMachine
         void BuyMonster();
         void ShowAllMonsters();
         void addFunds(int amount);
-        void EndTransaction(int monsterValue);
+        Dictionary<string, int> EndTransaction(int _availableFunds);
     }
 
-    internal class MonsterManager : IVending
+    public class MonsterManager : IVending
     {
         public MonsterManager()
         {
@@ -25,11 +25,11 @@ namespace VendingMachine
             _availableFunds = 0;
         }
 
-        private int _availableFunds;
-        private int _idForPurchase;
+        public int _availableFunds;
         private ConsoleKeyInfo status;
+        public int[] denominations = { 1, 5, 10, 20, 50, 100, 500, 1000 };
 
-        public List<Monster> Monsters { get; set; }
+    public List<Monster> Monsters { get; set; }
         public void CreateMonsterList()
         {
             Aliens alien = new Aliens("The Grey", 10, 100);
@@ -87,9 +87,8 @@ namespace VendingMachine
                 {
                     if (monster.CurrentValue <= _availableFunds)
                     {
-                        _idForPurchase = monster.Id;
-                        ShowAvailableFunds();
-                        EndTransaction(monster.CurrentValue);
+                        _availableFunds -= monster.CurrentValue;
+                        ShowAvailableFunds();                 
                         UseMonster(monster.Name);
                         break;
                     }
@@ -101,9 +100,62 @@ namespace VendingMachine
             }
         }
 
-        public void EndTransaction(int monsterValue)
+        public Dictionary<string, int> EndTransaction(int _availableFunds)
         {
-            _availableFunds -= monsterValue;
+            Dictionary<string, int> _denominations = new Dictionary<string, int>() { { "thousands", 0 }, { "fivehundreds", 0 }, { "hundreds", 0 }, { "fifties", 0 }, { "twenties", 0 }, { "tens", 0 }, { "fives", 0 }, { "ones", 0 } };
+
+            int thousands, fivehundreds, hundreds, fifties, twenties, tens, fives, ones;
+            if (_availableFunds >= 1000)
+            {
+                thousands = _availableFunds / 1000;
+                _denominations["thousands"] = thousands;
+                _availableFunds -= thousands * 1000;
+            }
+            if (_availableFunds >= 500)
+            {
+                fivehundreds = _availableFunds / 500;
+                _denominations["fivehundreds"] = fivehundreds;
+                _availableFunds -= fivehundreds * 500;
+            }
+            if (_availableFunds >= 100)
+            {
+                hundreds = _availableFunds / 100;
+                _denominations["hundreds"] = hundreds;
+                _availableFunds -= hundreds * 100;
+            }
+            if (_availableFunds >= 50)
+            {
+                fifties = _availableFunds / 50;
+                _denominations["fifties"] = fifties;
+                _availableFunds -= fifties * 50;
+            }
+            if (_availableFunds >= 20)
+            {
+                twenties = _availableFunds / 20;
+                _denominations["twenties"] = twenties;
+                _availableFunds -= twenties * 20;
+            }
+            if (_availableFunds >= 10)
+            {
+                tens = _availableFunds / 10;
+                _denominations["tens"] = tens;
+                _availableFunds -= tens * 10;
+            }
+            if (_availableFunds >= 5)
+            {
+                fives = _availableFunds / 5;
+                _denominations["fives"] = fives;
+                _availableFunds -= fives * 5;
+            }
+
+            if (_availableFunds >= 1)
+            {
+                ones = _availableFunds;
+                _denominations["ones"] = ones;
+
+            }
+
+            return _denominations;
         }
     }
 }

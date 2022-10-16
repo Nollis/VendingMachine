@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VendingMachine
 {
-    internal abstract class Monster
+    public abstract class Monster
     {
         public Monster(string name, int power, int currentValue)
         {
